@@ -24,48 +24,93 @@ export function Contact() {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [toast, setToast] = useState({
+  show: false,
+  type: 'success' as 'success' | 'error',
+  message: '',
+})
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+ const handleSubmit = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
   e.preventDefault()
   setIsSubmitting(true)
 
-  const encode = (data: Record<string, string>) =>
-    Object.keys(data)
-      .map(
-        key =>
-          encodeURIComponent(key) +
-          '=' +
-          encodeURIComponent(data[key])
-      )
-      .join('&')
-
   try {
-    await fetch('/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: encode({
-        'form-name': 'contact',
-        ...formState,
-      }),
+    const response = await fetch(
+      window.location.pathname,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type':
+            'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          'form-name': 'contact',
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+        }).toString(),
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error('Submit failed')
+    }
+
+    setToast({
+      show: true,
+      type: 'success',
+      message: 'Message sent successfully! I will get back to you soon.',
     })
 
-    alert('Message sent successfully ✨')
     setFormState({
       name: '',
       email: '',
       message: '',
     })
-  } catch {
-    alert('Something went wrong.')
-  }
+  } catch (error) {
+    setToast({
+      show: true,
+      type: 'error',
+      message:
+        'Something went wrong. Please try again.',
+    })
+  } finally {
+    setIsSubmitting(false)
 
-  setIsSubmitting(false)
+    setTimeout(() => {
+      setToast(prev => ({
+        ...prev,
+        show: false,
+      }))
+    }, 4000)
+  }
 }
 
   return (
     <section id="contact" className="py-24 lg:py-32 relative overflow-hidden">
+      {toast.show && (
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0 }}
+    className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-xl backdrop-blur-xl border max-w-sm ${
+      toast.type === 'success'
+        ? 'bg-[#F8F1E7]/95 border-[#D96C8D]/30 text-[#6B4F3B]'
+        : 'bg-red-50/95 border-red-200 text-red-700'
+    }`}
+  >
+    <p className="font-semibold">
+      {toast.type === 'success'
+        ? 'Success '
+        : 'Error '}
+    </p>
+    <p className="text-sm opacity-80">
+      {toast.message}
+    </p>
+  </motion.div>
+)}
       {/* Evening/sunset gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rose-pink/5 to-muted-navy/10" />
       
@@ -95,6 +140,7 @@ export function Contact() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
+          
             <form
               name="contact"
               method="POST"
