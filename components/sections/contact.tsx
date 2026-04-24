@@ -38,7 +38,7 @@ export function Contact() {
 
   try {
     const response = await fetch(
-      window.location.pathname,
+      '/',
       {
         method: 'POST',
         headers: {
