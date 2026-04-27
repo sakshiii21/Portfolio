@@ -15,6 +15,8 @@ const socialLinks = [
   { icon: Code2, href: 'https://leetcode.com/u/sae21/', label: 'LeetCode' },
 ]
 
+type ToastType = 'success' | 'error'
+
 export function Contact() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -25,97 +27,108 @@ export function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState({
-  show: false,
-  type: 'success' as 'success' | 'error',
-  message: '',
-})
+    show: false,
+    type: 'success' as ToastType,
+    message: '',
+  })
 
- const handleSubmit = async (
-  e: React.FormEvent<HTMLFormElement>
-) => {
-  e.preventDefault()
-  setIsSubmitting(true)
-
-  try {
-    const response = await fetch(
-      '/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type':
-            'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          'form-name': 'contact',
-          name: formState.name,
-          email: formState.email,
-          message: formState.message,
-        }).toString(),
-      }
-    )
-
-    if (!response.ok) {
-      throw new Error('Submit failed')
-    }
-
-    setToast({
-      show: true,
-      type: 'success',
-      message: 'Message sent successfully! I will get back to you soon.',
-    })
-
-    setFormState({
-      name: '',
-      email: '',
-      message: '',
-    })
-  } catch (error) {
-    setToast({
-      show: true,
-      type: 'error',
-      message:
-        'Something went wrong. Please try again.',
-    })
-  } finally {
-    setIsSubmitting(false)
-
-    setTimeout(() => {
+  const showToast = (type: ToastType, message: string) => {
+    setToast({ show: true, type, message })
+    window.setTimeout(() => {
       setToast(prev => ({
         ...prev,
         show: false,
       }))
     }, 4000)
   }
-}
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log('Form submit started')
+    setIsSubmitting(true)
+
+    const formData = new FormData(e.currentTarget)
+    const botField = (formData.get('bot-field') ?? '').toString().trim()
+    const name = (formData.get('name') ?? '').toString().trim()
+    const email = (formData.get('email') ?? '').toString().trim()
+    const message = (formData.get('message') ?? '').toString().trim()
+
+    console.log('Bot field:', botField ? 'filled' : 'empty')
+    console.log('Name:', name)
+    console.log('Email:', email)
+    console.log('Message length:', message.length)
+
+    if (botField) {
+      console.log('Spam detected, blocking submission')
+      showToast('error', 'Spam protection triggered. Submission blocked.')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (!name || !email || !message) {
+      console.log('Validation failed: missing fields')
+      showToast('error', 'Please fill out every field before sending.')
+      setIsSubmitting(false)
+      return
+    }
+
+    console.log('Fetching /api/contact')
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, message }),
+      })
+
+      console.log('Response status:', response.status)
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        console.log('Response data:', data)
+        const message = data?.error || 'Something went wrong. Please try again.'
+        throw new Error(message)
+      }
+
+      console.log('Email sent successfully')
+      setFormState({ name: '', email: '', message: '' })
+      showToast('success', 'Message sent successfully! I will get back to you soon.')
+    } catch (error) {
+      console.error('Client error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Something went wrong. Please try again.'
+      showToast('error', errorMessage)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <section id="contact" className="py-24 lg:py-32 relative overflow-hidden">
       {toast.show && (
-  <motion.div
-    initial={{ opacity: 0, y: -20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0 }}
-    className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-xl backdrop-blur-xl border max-w-sm ${
-      toast.type === 'success'
-        ? 'bg-[#F8F1E7]/95 border-[#D96C8D]/30 text-[#6B4F3B]'
-        : 'bg-red-50/95 border-red-200 text-red-700'
-    }`}
-  >
-    <p className="font-semibold">
-      {toast.type === 'success'
-        ? 'Success '
-        : 'Error '}
-    </p>
-    <p className="text-sm opacity-80">
-      {toast.message}
-    </p>
-  </motion.div>
-)}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          role="status"
+          aria-live="polite"
+          className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-xl backdrop-blur-xl border max-w-sm ${
+            toast.type === 'success'
+              ? 'bg-[#F8F1E7]/95 border-[#D96C8D]/30 text-[#6B4F3B]'
+              : 'bg-red-50/95 border-red-200 text-red-700'
+          }`}
+        >
+          <p className="font-semibold">
+            {toast.type === 'success' ? 'Success' : 'Error'}
+          </p>
+          <p className="text-sm opacity-80">{toast.message}</p>
+        </motion.div>
+      )}
+
       {/* Evening/sunset gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rose-pink/5 to-muted-navy/10" />
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-rose-pink/5 to-muted-navy/10" />
       
       {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-warm-brown/5 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-warm-brown/5 to-transparent" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" ref={ref}>
         <motion.div
@@ -140,23 +153,19 @@ export function Contact() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-          
             <form
               name="contact"
               method="POST"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
               onSubmit={handleSubmit}
               className="parchment rounded-2xl p-8 space-y-6"
             >
-              <input type="hidden" name="form-name" value="contact" />
+              <p className="hidden" aria-hidden="true">
+                <label>
+                  Don’t fill this out:
+                  <input name="bot-field" />
+                </label>
+              </p>
 
-                <p className="hidden">
-                  <label>
-                    Don’t fill this out:
-                    <input name="bot-field" />
-                  </label>
-                </p>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-warm-brown dark:text-cream mb-2">
                   Name
@@ -166,7 +175,7 @@ export function Contact() {
                   id="name"
                   name="name"
                   value={formState.name}
-                  onChange={(e) => setFormState(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={e => setFormState(prev => ({ ...prev, name: e.target.value }))}
                   required
                   className="w-full px-4 py-3 rounded-xl bg-background/50 border border-border focus:border-rose-pink focus:ring-2 focus:ring-rose-pink/20 outline-none transition-all text-warm-brown dark:text-cream placeholder:text-warm-brown/40 dark:placeholder:text-cream/40"
                   placeholder="Your name"
@@ -182,7 +191,7 @@ export function Contact() {
                   id="email"
                   name="email"
                   value={formState.email}
-                  onChange={(e) => setFormState(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={e => setFormState(prev => ({ ...prev, email: e.target.value }))}
                   required
                   className="w-full px-4 py-3 rounded-xl bg-background/50 border border-border focus:border-rose-pink focus:ring-2 focus:ring-rose-pink/20 outline-none transition-all text-warm-brown dark:text-cream placeholder:text-warm-brown/40 dark:placeholder:text-cream/40"
                   placeholder="your@email.com"
@@ -197,7 +206,7 @@ export function Contact() {
                   id="message"
                   name="message"
                   value={formState.message}
-                  onChange={(e) => setFormState(prev => ({ ...prev, message: e.target.value }))}
+                  onChange={e => setFormState(prev => ({ ...prev, message: e.target.value }))}
                   required
                   rows={5}
                   className="w-full px-4 py-3 rounded-xl bg-background/50 border border-border focus:border-rose-pink focus:ring-2 focus:ring-rose-pink/20 outline-none transition-all resize-none text-warm-brown dark:text-cream placeholder:text-warm-brown/40 dark:placeholder:text-cream/40"

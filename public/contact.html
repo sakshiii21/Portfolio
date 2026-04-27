@@ -1,15 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<body>
 <form
   name="contact"
   method="POST"
+  action="/?form=success#contact"
   data-netlify="true"
-  hidden
+  data-netlify-honeypot="bot-field"
 >
-  <input
-    type="hidden"
-    name="form-name"
-    value="contact"
-  />
-  <input type="text" name="name" />
-  <input type="email" name="email" />
+  <input type="hidden" name="form-name" value="contact" />
+
+  <p hidden>
+    <label>Don’t fill this out:
+      <input name="bot-field" />
+    </label>
+  </p>
+
+  <input name="name" />
+  <input name="email" />
   <textarea name="message"></textarea>
 </form>
+</body>
+</html>
+
