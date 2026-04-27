@@ -167,7 +167,7 @@ export function Contact() {
               </p>
 
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-warm-brown dark:text-cream mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-warm-brown dark:text-brown mb-2">
                   Name
                 </label>
                 <input
@@ -183,7 +183,7 @@ export function Contact() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-warm-brown dark:text-cream mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-warm-brown dark:text-brown mb-2">
                   Email
                 </label>
                 <input
@@ -199,7 +199,7 @@ export function Contact() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-warm-brown dark:text-cream mb-2">
+                <label htmlFor="message" className="block text-sm font-medium text-warm-brown dark:text-brown mb-2">
                   Message
                 </label>
                 <textarea
