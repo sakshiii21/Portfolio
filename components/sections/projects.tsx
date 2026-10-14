@@ -8,9 +8,9 @@ import Image from 'next/image'
 const projects = [
   {
     title: 'Shastralok',
-    description: 'AI scripture platform with interactive maps, quizzes, and RAG-powered search for exploring ancient texts.',
-    longDescription: 'A comprehensive platform that brings ancient scriptures to life through AI-powered search, interactive geographical maps showing historical locations, engaging quizzes, and intelligent RAG pipelines for contextual understanding.',
-    stack: ['React', 'Tailwind CSS', 'Node.js', 'Leaflet', 'RAG'],
+    description: 'Scripture explorer with chapter browsing, a short quiz, map views, and generated illustrations.',
+    longDescription: 'A React frontend for browsing bundled scripture chapters, using the map view, taking a short quiz, and requesting illustrations through a configured Gradio model.',
+    stack: ['React', 'Vite', 'JavaScript', 'React Leaflet', 'Gradio'],
     image: '/projects/shastralok.png',
     github: 'https://github.com/sakshiii21/ShastraLok',
     live: 'https://shastra-lok.vercel.app/',
@@ -18,9 +18,9 @@ const projects = [
   },
   {
     title: 'Cosmalearn',
-    description: 'Modern learning platform with server-side rendering for optimal performance and SEO.',
-    longDescription: 'An educational platform built with Next.js featuring SSR for fast page loads, interactive course modules, progress tracking, and a beautiful responsive design that works across all devices.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'MongoDB'],
+    description: 'Astronomy academy website with course, instructor, and webinar sections.',
+    longDescription: 'A Next.js frontend that presents course listings and details alongside instructor and webinar content.',
+    stack: ['Next.js', 'React', 'TypeScript'],
     image: '/projects/cosmalearn.png',
     github: 'https://github.com/sakshiii21/cosmalearn',
     live: 'https://cosmalearn.vercel.app/',
@@ -28,9 +28,9 @@ const projects = [
   },
   {
     title: 'MinuteMind',
-    description: 'AI-powered meeting summarizer that extracts key points and action items automatically.',
-    longDescription: 'Transform lengthy meeting recordings into concise summaries using advanced NLP. Features include automatic action item extraction, key point highlighting, and exportable reports for team collaboration.',
-    stack: ['React.js', 'NLP', 'Express.js', 'Node.js','Transformer Models'],
+    description: 'Meeting transcript summarizer with PDF download and email delivery.',
+    longDescription: 'A React frontend and Express backend that send a meeting transcript to Groq for summarization, let users download notes as a PDF, and send notes by email.',
+    stack: ['React', 'Vite', 'Express', 'Groq SDK', 'Nodemailer'],
     image: '/projects/minutemind.png',
     github: 'https://github.com/sakshiii21/MinuteMind',
     live: 'https://minute-mind-liard.vercel.app/',

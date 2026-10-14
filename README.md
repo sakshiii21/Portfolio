@@ -1,125 +1,58 @@
-# 🌐 Personal Portfolio Website
+# Sakshi Singh — Developer Portfolio
 
-A modern, responsive, and fully personalized developer portfolio built to showcase my skills, projects, journey, and personality through design.
+Personal portfolio built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion. It brings together project information, selected experience and skills, and a contact form.
 
-🔗 **Live Demo:** https://portfolio-sakshisingh.vercel.app/
-💻 **GitHub Repo:** https://github.com/sakshiii21/Portfolio
+**Live site:** [portfolio-sakshisingh.vercel.app](https://portfolio-sakshisingh.vercel.app/)
 
----
+**Source:** [github.com/sakshiii21/Portfolio](https://github.com/sakshiii21/Portfolio)
 
-## ✨ About The Project
+## Features
 
-This is my very first portfolio website, created as a way to present my work while exploring my own design style and identity as a developer.
+- Responsive portfolio pages built with the Next.js App Router.
+- Project, skills, experience, and contact sections.
+- Contact form handled by a Next.js route and the Resend API.
+- Motion effects using Framer Motion.
 
-Rather than using a generic template, I wanted to build something authentic, interactive, and visually expressive. This project helped me grow not only in frontend development, but also in design thinking, animations, deployment, and production workflows.
+## Stack
 
----
+Next.js · React · TypeScript · Tailwind CSS · Framer Motion · Resend
 
-## 🚀 Built With
+## Run locally
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
-* Framer Motion
-* Vercel
-* Resend API
+Requires Node.js and npm.
 
----
-
-## 🎯 Features
-
-* Fully responsive modern UI
-* Smooth animations and transitions
-* Personalized branding and design
-* Projects showcase section
-* Skills section
-* Contact form with email delivery
-* Fast deployment on Vercel
-* Clean and scalable codebase
-
----
-
-## 📬 Contact Form
-
-The contact form is powered using:
-
-* Next.js API Routes
-* Resend Email API
-
-Messages submitted through the portfolio are delivered directly to my inbox.
-
----
-
-## 📸 Preview
-
-Visit the live portfolio here:
-
-👉 https://portfolio-sakshisingh.vercel.app/
-
----
-
-## 🛠️ Run Locally
-
-Clone the project:
-
-```bash id="k7rvri"
+```bash
 git clone https://github.com/sakshiii21/Portfolio.git
-```
-
-Go to project folder:
-
-```bash id="9v3rt4"
 cd Portfolio
-```
-
-Install dependencies:
-
-```bash id="tzh28r"
-npm install
-```
-
-Run development server:
-
-```bash id="8dd7cb"
+npm ci
 npm run dev
 ```
 
----
+Open [http://localhost:3000](http://localhost:3000).
 
-## 🌱 What I Learned
+To use the contact form, create `.env.local` in the project root and set:
 
-Through this project I learned:
+```dotenv
+RESEND_API_KEY=your_resend_api_key
+```
 
-* Building with Next.js App Router
-* Creating polished responsive layouts
-* Using Tailwind efficiently
-* Adding animations with Framer Motion
-* Handling forms with backend APIs
-* Deployment and production debugging
-* Designing with authenticity
+The contact route uses this key to send messages. Keep the key private and set it in the hosting provider's environment settings for a deployed instance.
 
----
+## Available scripts
 
-## 📌 Future Improvements
+- `npm run dev` — start the development server.
+- `npm run build` — create a production build.
+- `npm start` — serve the production build.
+- `npm run lint` — run ESLint.
 
-* Dark / light theme toggle
-* Blog section
-* CMS integration
-* More interactive animations
-* Analytics dashboard
+## Project layout
 
----
+- `app/` — App Router pages, layout, and contact API route.
+- `components/` — page sections and reusable UI components.
+- `hooks/` — React hooks.
+- `lib/` — shared utilities.
+- `public/` — static assets.
 
-## 🤝 Connect With Me
+## Notes
 
-If you'd like to collaborate or connect:
-
-* LinkedIn: https://www.linkedin.com/
-* Portfolio: https://portfolio-sakshisingh.vercel.app/
-
----
-
-## ⭐ Support
-
-If you like this project, feel free to star the repository!
+The repository contains both `package-lock.json` and `pnpm-lock.yaml`. The commands above use npm and its lockfile; consider choosing one package manager and removing the other lockfile in a separate cleanup.
